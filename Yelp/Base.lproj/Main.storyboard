@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Yelp-->
@@ -35,21 +36,25 @@
                                                         <constraint firstAttribute="height" constant="65" id="Pu9-bo-7X3"/>
                                                     </constraints>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cod-ez-tas">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cod-ez-tas">
                                                     <rect key="frame" x="81" y="30" width="83" height="15"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="15" id="oHR-3x-cOG"/>
+                                                        <constraint firstAttribute="width" constant="83" id="yBE-Qs-uY0"/>
+                                                    </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="88 Division St, Mission Bay" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3iA-Pr-7Mi">
                                                     <rect key="frame" x="81" y="46" width="164" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.07 mi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZK4-lW-rvB">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="0.07 mi" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZK4-lW-rvB">
                                                     <rect key="frame" x="322" y="10" width="44.5" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="0.54251499368686873" green="0.54251499368686873" blue="0.54251499368686873" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="469 Reviews" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eCY-JG-J54">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="469 Reviews" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eCY-JG-J54">
                                                     <rect key="frame" x="172" y="29" width="78" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                     <color key="textColor" red="0.54251499368686873" green="0.54251499368686873" blue="0.54251499368686873" alpha="1" colorSpace="calibratedRGB"/>
@@ -76,10 +81,14 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="F2I-mi-o2n" firstAttribute="top" secondItem="f7N-Qb-MYA" secondAttribute="top" constant="8" id="0Ji-5U-8x7"/>
+                                                <constraint firstItem="eCY-JG-J54" firstAttribute="centerY" secondItem="cod-ez-tas" secondAttribute="centerY" id="58R-1L-5RI"/>
                                                 <constraint firstItem="F2I-mi-o2n" firstAttribute="leading" secondItem="f7N-Qb-MYA" secondAttribute="leading" constant="8" id="65H-R1-uuN"/>
                                                 <constraint firstItem="KYD-AP-3Fr" firstAttribute="leading" secondItem="F2I-mi-o2n" secondAttribute="trailing" constant="8" id="7PS-5H-6Ct"/>
-                                                <constraint firstItem="ZK4-lW-rvB" firstAttribute="baseline" secondItem="KYD-AP-3Fr" secondAttribute="baseline" id="Fih-sR-Hmp"/>
                                                 <constraint firstAttribute="trailing" secondItem="ZK4-lW-rvB" secondAttribute="trailing" constant="8" id="HOs-eT-bLP"/>
+                                                <constraint firstItem="ZK4-lW-rvB" firstAttribute="top" secondItem="f7N-Qb-MYA" secondAttribute="topMargin" constant="2" id="PeF-93-eyR"/>
+                                                <constraint firstItem="cod-ez-tas" firstAttribute="leading" secondItem="F2I-mi-o2n" secondAttribute="trailing" constant="8" id="Pnp-Fl-yvb"/>
+                                                <constraint firstItem="cod-ez-tas" firstAttribute="top" secondItem="KYD-AP-3Fr" secondAttribute="bottom" constant="4" id="Skh-7g-gSv"/>
+                                                <constraint firstItem="eCY-JG-J54" firstAttribute="leading" secondItem="cod-ez-tas" secondAttribute="trailing" constant="8" id="g0d-3D-vO1"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="F2I-mi-o2n" secondAttribute="bottom" constant="12" id="kyd-VJ-klh"/>
                                                 <constraint firstItem="KYD-AP-3Fr" firstAttribute="top" secondItem="f7N-Qb-MYA" secondAttribute="top" constant="8" id="oGB-k7-AFa"/>
                                                 <constraint firstItem="ZK4-lW-rvB" firstAttribute="leading" secondItem="KYD-AP-3Fr" secondAttribute="trailing" constant="8" id="tAy-ob-N8G"/>
