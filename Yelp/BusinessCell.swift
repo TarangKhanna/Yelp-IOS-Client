@@ -42,6 +42,13 @@ class BusinessCell: UITableViewCell {
         thumbImageView.layer.cornerRadius = 5
         thumbImageView.clipsToBounds = true
         // Initialization code
+        
+//        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width // causes truncation of namelabel
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+//        nameLabel.preferredMaxLayoutWidth = nameLabel.frame.size.width // causes truncation of namelabel
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
