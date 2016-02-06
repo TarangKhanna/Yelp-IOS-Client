@@ -8,28 +8,38 @@
 
 import UIKit
 import DGElasticPullToRefresh
+import DGActivityIndicatorView
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
     var businesses: NSMutableArray = []
     var searchBar = UISearchBar()
     var filteredBusiness  = []
+    let activityIndicatorView = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType.RotatingSquares, tintColor: UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0), size: 70.0)
+    
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        searchBar.showsCancelButton = false
+        
         retrieve()
+        
+        // loading view
+        activityIndicatorView.center = self.view.center
+        self.view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         
         // Pull to refresh
         let loadingView = DGElasticPullToRefreshLoadingViewCircle()
-        loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+        loadingView.tintColor = UIColor.whiteColor()
         tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
             self!.retrieve()
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingView)
-        tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+        tableView.dg_setPullToRefreshFillColor(UIColor(red: 247/255.0, green: 168/255.0, blue: 41/255.0, alpha: 1.0))
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
         searchBar.showsCancelButton = true
@@ -59,10 +69,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func retrieve() {
-        Business.searchWithTerm("Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(10, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
                 self.businesses.addObjectsFromArray(businesses)
             }
+            self.activityIndicatorView.stopAnimating()
+            self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
         })
     }
@@ -106,6 +118,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
         tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {

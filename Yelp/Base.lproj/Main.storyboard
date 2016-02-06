@@ -123,13 +123,7 @@
                             <constraint firstItem="cgS-rk-4GL" firstAttribute="top" secondItem="XhR-oz-92f" secondAttribute="top" id="pz9-2u-nHf"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Yelp" id="1WS-WK-rcS">
-                        <barButtonItem key="leftBarButtonItem" title="Filters" id="lOl-UV-ij3">
-                            <connections>
-                                <segue destination="X1s-KE-I1k" kind="presentation" id="g0c-rQ-G2n"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Yelp" id="1WS-WK-rcS"/>
                     <connections>
                         <outlet property="tableView" destination="cgS-rk-4GL" id="cqI-xQ-xJ4"/>
                     </connections>
