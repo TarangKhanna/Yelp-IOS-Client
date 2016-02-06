@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DGElasticPullToRefresh
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
@@ -18,6 +19,18 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        retrieve()
+        
+        // Pull to refresh
+        let loadingView = DGElasticPullToRefreshLoadingViewCircle()
+        loadingView.tintColor = UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0)
+        tableView.dg_addPullToRefreshWithActionHandler({ [weak self] () -> Void in
+            self!.retrieve()
+            self?.tableView.dg_stopLoading()
+            }, loadingView: loadingView)
+        tableView.dg_setPullToRefreshFillColor(UIColor(red: 57/255.0, green: 67/255.0, blue: 89/255.0, alpha: 1.0))
+        tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
         searchBar.showsCancelButton = true
         searchBar.delegate = self
@@ -31,13 +44,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120 // used for only scroll height dimensions
         
-        Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-            if nil != businesses{
-                self.businesses.addObjectsFromArray(businesses)
-            }
-                self.tableView.reloadData()
-            self.tableView.reloadData()
-        })
+        
 
 /* Example of Yelp search with more search options specified
         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
@@ -49,6 +56,15 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
 */
+    }
+    
+    func retrieve() {
+        Business.searchWithTerm("Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            if nil != businesses{
+                self.businesses.addObjectsFromArray(businesses)
+            }
+            self.tableView.reloadData()
+        })
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -96,7 +112,16 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.filteredBusiness = []
         self.tableView.reloadData()
         self.searchBar.resignFirstResponder()
-        
+        self.searchBar.text = ""
     }
+    
+    deinit {
+        tableView.dg_removePullToRefresh()
+    }
+}
 
+extension UIScrollView {
+    // to fix a problem where all the constraints of the tableview
+    // are deleted
+    func dg_stopScrollingAnimation() {}
 }
