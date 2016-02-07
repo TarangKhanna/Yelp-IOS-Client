@@ -15,9 +15,10 @@ class DetailViewController: UIViewController, MKMapViewDelegate
     
     @IBOutlet weak var addressLabel: UILabel!
     
-   
+    
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var picView: UIImageView!
     
     
     @IBOutlet weak var reviewLabel: UILabel!
@@ -29,28 +30,39 @@ class DetailViewController: UIViewController, MKMapViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = business.name!
-        print(business.name)
-        let reviewCount = self.business.reviewCount!
-        if (reviewCount == 1) {
-            self.reviewLabel.text = "\(reviewCount) review"
+        if business != nil {
+            
+            self.navigationItem.title = business.name!
+            print(business.name)
+            let reviewCount = self.business.reviewCount!
+            if (reviewCount == 1) {
+                self.reviewLabel.text = "\(reviewCount) review"
+            } else {
+                self.reviewLabel.text = "\(reviewCount) reviews"
+            }
+            
+            if (self.business.imageURL != nil) {
+                self.picView.setImageWithURL(business.imageURL!)
+            }
+            
+            self.picView.layer.cornerRadius = 9.0
+            self.picView.layer.masksToBounds = true
+            
+            self.addressLabel.text = self.business.address
+            self.categoriesLabel.text = self.business.categories
+            
+            
+            self.mapView.delegate = self
+            let annotation = MKPointAnnotation()
+            let coordinate = CLLocationCoordinate2D(latitude: self.business.latitude!, longitude: self.business.longitude!)
+            annotation.coordinate = coordinate
+            self.mapView.addAnnotation(annotation)
+            self.mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpanMake(0.01, 0.01)), animated: true)
+            self.mapView.layer.cornerRadius = 9.0
+            self.mapView.layer.masksToBounds = true
         } else {
-            self.reviewLabel.text = "\(reviewCount) reviews"
+            
         }
-        
-        self.addressLabel.text = self.business.address
-        self.categoriesLabel.text = self.business.categories
-        
-        
-        self.mapView.delegate = self
-        let annotation = MKPointAnnotation()
-        let coordinate = CLLocationCoordinate2D(latitude: self.business.latitude!, longitude: self.business.longitude!)
-        annotation.coordinate = coordinate
-        self.mapView.addAnnotation(annotation)
-        self.mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpanMake(0.01, 0.01)), animated: true)
-        self.mapView.layer.cornerRadius = 9.0
-        self.mapView.layer.masksToBounds = true
-        
         // Do any additional setup after loading the view.
     }
     

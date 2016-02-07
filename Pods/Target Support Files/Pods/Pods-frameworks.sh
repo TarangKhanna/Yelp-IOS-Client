@@ -88,10 +88,12 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/BDBOAuth1Manager.framework"
   install_framework "Pods/DGActivityIndicatorView.framework"
   install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/ElasticTransition.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/AFNetworking.framework"
   install_framework "Pods/BDBOAuth1Manager.framework"
   install_framework "Pods/DGActivityIndicatorView.framework"
   install_framework "Pods/DGElasticPullToRefresh.framework"
+  install_framework "Pods/ElasticTransition.framework"
 fi

@@ -9,12 +9,14 @@
 import UIKit
 import DGElasticPullToRefresh
 import DGActivityIndicatorView
+import ElasticTransition
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
     var didSegue : Bool = false
     var pages = 0
     var originalSize = 0
+    var searchActive : Bool = false
     var businesses: NSMutableArray = []
     var searchBar = UISearchBar()
     var filteredBusiness  = []
@@ -24,9 +26,21 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     @IBOutlet weak var tableView: UITableView!
     
+    var transition = ElasticTransition()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        searchActive = false
+        
+        // custom transition
+        transition.sticky = true
+        transition.showShadow = true
+        transition.panThreshold = 0.3
+        transition.transformType = .TranslateMid
+        transition.edge = .Right
+        navigationController?.delegate = transition
+        
         retrieve()
         
         // loading view
@@ -141,6 +155,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
                 filteredBusiness = filteredArray
             }
         }
+        if searchText.characters.count > 0 {
+            searchActive = true
+        } else {
+            searchActive = false
+            //            searchBar.resignFirstResponder()
+        }
         tableView.reloadData()
     }
     
@@ -154,6 +174,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.searchBar.resignFirstResponder()
         self.searchBar.text = ""
         searchBar.showsCancelButton = false
+        searchActive = false
     }
     
     // Infinite scroll
@@ -192,7 +213,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             let row = tableView.indexPathForCell(cell)!.row
             if segue.identifier == "details" {
                 let vc = segue.destinationViewController as! DetailViewController
-                if didSegue && filteredBusiness.count > 0 {
+                if searchActive && filteredBusiness.count > 0 || didSegue && filteredBusiness.count > 0 {
                     let business = filteredBusiness[row]
                     didSegue = true
                     vc.business = business as! Business
@@ -207,7 +228,12 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
         searchBar.showsCancelButton = true
-//        searchActive = true
+        searchActive = true
+    }
+    
+    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+         searchBar.showsCancelButton = false
+         searchActive = false
     }
     
     deinit {

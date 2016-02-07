@@ -5,3 +5,4 @@ pod 'BDBOAuth1Manager'
 pod "DGElasticPullToRefresh"
 pod 'DGActivityIndicatorView'
 pod 'DGActivityIndicatorView'
+pod "ElasticTransition"
