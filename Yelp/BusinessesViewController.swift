@@ -81,7 +81,14 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func loadMoreData() {
         Business.searchWithTerm(pages*10, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
+//                self.businesses.removeAllObjects()
                 self.businesses.addObjectsFromArray(businesses)
+                let set = NSMutableSet()
+                set.addObjectsFromArray(self.businesses as [AnyObject])
+                self.businesses.removeAllObjects()
+                self.businesses.addObjectsFromArray(Array(set))
+                print("NEW")
+                print(self.businesses)
             }
             self.isMoreDataLoading = false
             self.loadingMoreView!.stopAnimating()
@@ -174,6 +181,10 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             // ... Code to load more results ...
             
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
     }
     
     deinit {
