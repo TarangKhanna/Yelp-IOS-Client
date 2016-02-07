@@ -12,19 +12,19 @@ import DGActivityIndicatorView
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
+    var pages = 0
     var businesses: NSMutableArray = []
     var searchBar = UISearchBar()
     var filteredBusiness  = []
     let activityIndicatorView = DGActivityIndicatorView(type: DGActivityIndicatorAnimationType.RotatingSquares, tintColor: UIColor(red: 78/255.0, green: 221/255.0, blue: 200/255.0, alpha: 1.0), size: 70.0)
-    
+    var isMoreDataLoading = false
+    var loadingMoreView:InfiniteScrollActivityView?
     
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        searchBar.showsCancelButton = false
-        
+
         retrieve()
         
         // loading view
@@ -66,10 +66,31 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
 */
+        
+        // Set up Infinite Scroll loading indicator
+        let frame = CGRectMake(0, tableView.contentSize.height, tableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight)
+        loadingMoreView = InfiniteScrollActivityView(frame: frame)
+        loadingMoreView!.hidden = true
+        tableView.addSubview(loadingMoreView!)
+        
+        var insets = tableView.contentInset;
+        insets.bottom += InfiniteScrollActivityView.defaultHeight;
+        tableView.contentInset = insets
+    }
+    
+    func loadMoreData() {
+        Business.searchWithTerm(pages*10, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            if nil != businesses{
+                self.businesses.addObjectsFromArray(businesses)
+            }
+            self.isMoreDataLoading = false
+            self.loadingMoreView!.stopAnimating()
+            self.tableView.reloadData()
+        })
     }
     
     func retrieve() {
-        Business.searchWithTerm(10, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(0, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
                 self.businesses.addObjectsFromArray(businesses)
             }
@@ -121,7 +142,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        
+        searchBar.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
@@ -129,6 +150,30 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.tableView.reloadData()
         self.searchBar.resignFirstResponder()
         self.searchBar.text = ""
+    }
+    
+    // Infinite scroll
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (!isMoreDataLoading) {
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
+            
+            // When the user has scrolled past the threshold, start requesting
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.dragging) {
+                isMoreDataLoading = true
+                // Update position of loadingMoreView, and start loading indicator
+                let frame = CGRectMake(0, tableView.contentSize.height, tableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight)
+                loadingMoreView?.frame = frame
+                loadingMoreView!.startAnimating()
+                self.pages += 1
+                loadMoreData()
+                // ... Code to load more results ...
+            }
+            // ... Code to load more results ...
+            
+        }
     }
     
     deinit {
