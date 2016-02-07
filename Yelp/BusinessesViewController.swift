@@ -55,33 +55,24 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             self!.retrieve()
             self?.tableView.dg_stopLoading()
             }, loadingView: loadingView)
-        tableView.dg_setPullToRefreshFillColor(UIColor(red: 247/255.0, green: 168/255.0, blue: 41/255.0, alpha: 1.0))
+        tableView.dg_setPullToRefreshFillColor(UIColor.redColor())
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
+        
+        
+        // navigation bar customization
+        navigationItem.titleView = searchBar
+        navigationController!.navigationBar.barTintColor = UIColor.redColor()
+        navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         
         searchBar.showsCancelButton = false
         searchBar.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.Minimal
         searchBar.sizeToFit()
-        
-        navigationItem.titleView = searchBar
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120 // used for only scroll height dimensions
-        
-        
-
-/* Example of Yelp search with more search options specified
-        Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-            self.businesses = businesses
-            
-            for business in businesses {
-                print(business.name!)
-                print(business.address!)
-            }
-        }
-*/
         
         // Set up Infinite Scroll loading indicator
         let frame = CGRectMake(0, tableView.contentSize.height, tableView.bounds.size.width, InfiniteScrollActivityView.defaultHeight)
@@ -214,6 +205,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
             if segue.identifier == "details" {
                 let vc = segue.destinationViewController as! DetailViewController
                 if searchActive && filteredBusiness.count > 0 || didSegue && filteredBusiness.count > 0 {
+                    print("searchActive")
                     let business = filteredBusiness[row]
                     didSegue = true
                     vc.business = business as! Business

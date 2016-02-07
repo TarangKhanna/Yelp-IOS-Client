@@ -15,6 +15,7 @@ class DetailViewController: UIViewController, MKMapViewDelegate
     
     @IBOutlet weak var addressLabel: UILabel!
     
+    @IBOutlet weak var ratingView: UIImageView!
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -45,6 +46,8 @@ class DetailViewController: UIViewController, MKMapViewDelegate
                 self.picView.setImageWithURL(business.imageURL!)
             }
             
+            self.ratingView.setImageWithURL(business.ratingImageURL!)
+            
             self.picView.layer.cornerRadius = 9.0
             self.picView.layer.masksToBounds = true
             
@@ -53,13 +56,13 @@ class DetailViewController: UIViewController, MKMapViewDelegate
             
             
             self.mapView.delegate = self
-            let annotation = MKPointAnnotation()
             let coordinate = CLLocationCoordinate2D(latitude: self.business.latitude!, longitude: self.business.longitude!)
-            annotation.coordinate = coordinate
+            let annotation = CustomAnnotation(title: business.name!,
+                locationName: business.categories!,
+                discipline:  business.name!,
+                coordinate: coordinate)
             self.mapView.addAnnotation(annotation)
             self.mapView.setRegion(MKCoordinateRegion(center: coordinate, span: MKCoordinateSpanMake(0.01, 0.01)), animated: true)
-            self.mapView.layer.cornerRadius = 9.0
-            self.mapView.layer.masksToBounds = true
         } else {
             
         }
@@ -67,17 +70,24 @@ class DetailViewController: UIViewController, MKMapViewDelegate
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        if !(annotation is MKPointAnnotation) {
-            return nil
+        if let annotation = annotation as? CustomAnnotation {
+            let identifier = "pin"
+            var view: MKPinAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
+                as? MKPinAnnotationView { // 2
+                    dequeuedView.annotation = annotation
+                    view = dequeuedView
+            } else {
+                view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.canShowCallout = true
+                view.calloutOffset = CGPoint(x: -5, y: 5)
+                view.rightCalloutAccessoryView = UIButton(type:.DetailDisclosure) as UIView
+            }
+            return view
         }
-        
-        var view = mapView.dequeueReusableAnnotationViewWithIdentifier("pin") as? MKPinAnnotationView
-        if view == nil {
-            view = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
-            view!.canShowCallout = false
-        }
-        return view
+        return nil
     }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
