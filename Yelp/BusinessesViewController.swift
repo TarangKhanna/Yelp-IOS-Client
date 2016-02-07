@@ -13,6 +13,7 @@ import DGActivityIndicatorView
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
     var pages = 0
+    var originalSize = 0
     var businesses: NSMutableArray = []
     var searchBar = UISearchBar()
     var filteredBusiness  = []
@@ -79,7 +80,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func loadMoreData() {
-        Business.searchWithTerm(pages*10, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm(pages*originalSize, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
 //                self.businesses.removeAllObjects()
                 self.businesses.addObjectsFromArray(businesses)
@@ -97,10 +98,11 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     }
     
     func retrieve() {
-        Business.searchWithTerm(0, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
+        Business.searchWithTerm("Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
                 self.businesses.addObjectsFromArray(businesses)
             }
+            self.originalSize = businesses.count
             self.activityIndicatorView.stopAnimating()
             self.activityIndicatorView.removeFromSuperview()
             self.tableView.reloadData()
