@@ -12,6 +12,7 @@ import DGActivityIndicatorView
 
 class BusinessesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate , UITextFieldDelegate{
 
+    var didSegue : Bool = false
     var pages = 0
     var originalSize = 0
     var businesses: NSMutableArray = []
@@ -43,7 +44,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         tableView.dg_setPullToRefreshFillColor(UIColor(red: 247/255.0, green: 168/255.0, blue: 41/255.0, alpha: 1.0))
         tableView.dg_setPullToRefreshBackgroundColor(tableView.backgroundColor!)
         
-        searchBar.showsCancelButton = true
+        searchBar.showsCancelButton = false
         searchBar.delegate = self
         searchBar.searchBarStyle = UISearchBarStyle.Minimal
         searchBar.sizeToFit()
@@ -82,14 +83,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
     func loadMoreData() {
         Business.searchWithTerm(pages*originalSize, term: "Restaurants", completion: { (businesses: [Business]!, error: NSError!) -> Void in
             if nil != businesses{
-//                self.businesses.removeAllObjects()
                 self.businesses.addObjectsFromArray(businesses)
-                let set = NSMutableSet()
-                set.addObjectsFromArray(self.businesses as [AnyObject])
-                self.businesses.removeAllObjects()
-                self.businesses.addObjectsFromArray(Array(set))
-                print("NEW")
-                print(self.businesses)
             }
             self.isMoreDataLoading = false
             self.loadingMoreView!.stopAnimating()
@@ -159,6 +153,7 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         self.tableView.reloadData()
         self.searchBar.resignFirstResponder()
         self.searchBar.text = ""
+        searchBar.showsCancelButton = false
     }
     
     // Infinite scroll
@@ -185,8 +180,34 @@ class BusinessesViewController: UIViewController, UITableViewDataSource, UITable
         }
     }
     
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        tableView.deselectRowAtIndexPath(indexPath, animated: false)
+        let currentCell = tableView.cellForRowAtIndexPath(indexPath)! as UITableViewCell
+        self.performSegueWithIdentifier("details", sender: currentCell)
+        searchBar.resignFirstResponder()
+    }
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
+        if let cell = sender as? UITableViewCell {
+            let row = tableView.indexPathForCell(cell)!.row
+            if segue.identifier == "details" {
+                let vc = segue.destinationViewController as! DetailViewController
+                if didSegue && filteredBusiness.count > 0 {
+                    let business = filteredBusiness[row]
+                    didSegue = true
+                    vc.business = business as! Business
+                } else {
+                    let business = businesses[row]
+                    vc.business = business as! Business
+                }
+            }
+        }
+
+    }
+    
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+        searchBar.showsCancelButton = true
+//        searchActive = true
     }
     
     deinit {

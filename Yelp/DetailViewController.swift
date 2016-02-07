@@ -10,9 +10,20 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    @IBOutlet weak var addressLabel: UILabel!
+    
+    @IBOutlet weak var distanceLabel: UILabel!
+    
+    @IBOutlet weak var reviewLabel: UILabel!
+    
+    @IBOutlet weak var categoriesLabel: UILabel!
+    
+    var business: Business!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        self.navigationItem.title = business.name
         // Do any additional setup after loading the view.
     }
 
