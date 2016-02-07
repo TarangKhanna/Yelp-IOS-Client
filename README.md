@@ -1,40 +1,6 @@
-### Basic Yelp client
+# Project 3 - *Name of App Here*
 
-This is a headless example of how to implement an OAuth 1.0a Yelp API client. The Yelp API provides an application token that allows applications to make unauthenticated requests to their search API.
-
-### Next steps
-
-- Check out `BusinessesViewController.swift` to see how to use the `Business` model.
-
-### Sample request
-
-**Basic search with query**
-
-```
-Business.searchWithTerm("Thai", completion: { (businesses: [Business]!, error: NSError!) -> Void in
-    self.businesses = businesses
-    
-    for business in businesses {
-        print(business.name!)
-        print(business.address!)
-    }
-})
-```
-
-**Advanced search with categories, sort, and deal filters**
-
-```
-Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-
-    for business in businesses {
-        print(business.name!)
-        print(business.address!)
-    }
-}
-
-# Project 3 - *Yelp2.0*
-
-**Yelp2.0** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
+**Name of your app** is a Yelp search app using the [Yelp API](http://www.yelp.com/developers/documentation/v2/search_api).
 
 Time spent: **X** hours spent in total
 
@@ -48,7 +14,7 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-- [x] Search results page
+- [ ] Search results page
    - [ ] Infinite scroll for restaurant results.
    - [ ] Implement map view of restaurant results.
 - [ ] Implement the restaurant detail page.
@@ -59,8 +25,8 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. API with oAuth
-2. 
+1. oAuth
+2. API
 
 ## Video Walkthrough 
 
@@ -89,4 +55,3 @@ Describe any challenges encountered while building the app.
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-```
