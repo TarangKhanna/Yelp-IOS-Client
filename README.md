@@ -14,15 +14,17 @@ The following **required** functionality is completed:
 
 The following **optional** features are implemented:
 
-- [ ] Search results page
+- [x] Search results page
    - [x] Infinite scroll for restaurant results.
-   - [ ] Implement map view of restaurant results.
-- [ ] Implement the restaurant detail page.
+   - [x] Implement map view of restaurant results.
+- [x] Implement the restaurant detail page.
 
 The following **additional** features are implemented:
 
 - [x] Pull to refresh
 - [x] Loading animation
+- [x] Custom transition
+- [x] Custom annotation
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
